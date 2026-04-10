@@ -358,32 +358,7 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
     <div class="panel">
       <div class="panel-hdr"><div class="panel-title">⚡ Key Facts</div></div>
       <div class="panel-body">
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:7px;">
-          ${[
-            ['Start','Varlamore (Yama\'s Lair)'],
-            ['Karamja','Free on first region unlock'],
-            ['Unlock','3 of 8 regions total'],
-            ['Misthalin','Locked — all league'],
-            ['XP Rate','5× base → 16× max'],
-            ['Drop Rate','2× base → 5× max'],
-            ['Farming Ticks','Every 1 minute'],
-            ['Minigame Pts','4× base → 8× max'],
-            ['Run Energy','Never drains'],
-            ['Clues','Stackable scroll boxes'],
-            ['Zulrah','No dmg cap, no melee immunity'],
-            ['DT2 Bosses','All drop all Soulreaper pieces'],
-            ['ToB/ToA','Shared group uniques'],
-            ['CoX CM','+25% dmg/def, +50% HP, 3× unique'],
-            ['ToB HM','+25% dmg/def, +50% HP, 2× unique'],
-            ['NMZ pts','1gp each in Kandarin'],
-            ['Wildy deaths','Gravestone — no item loss'],
-            ['Rev Caves','Free entry (no 100k)'],
-            ['Wildy Agility','Free entry'],
-            ['Shops','Never deplete'],
-            ['Sailing','Disabled'],
-            ['Duration','56 days (Apr 15 – Jun 10)'],
-          ].map(([l,v])=>`<div style="background:var(--s2);border:1px solid var(--border2);border-left:2px solid var(--gold);padding:8px 11px;border-radius:0 var(--r) var(--r) 0;"><div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:2px;color:var(--dim);text-transform:uppercase;margin-bottom:3px;">${l}</div><div style="font-size:13px;color:var(--bone);">${v}</div></div>`).join('')}
-        </div>
+        <div id="key-facts-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:7px;"></div>
       </div>
     </div>
 
@@ -451,20 +426,8 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
           </div>
         </div>
 
-        <div class="sh"><h3>Critical Rules & Clarifications</h3><div class="sh-line"></div></div>
-        ${[
-          ['Accuracy bonuses','All accuracy bonuses are <strong>additive, not multiplicative</strong>. A 35% node and a 15% node give +50% bonus accuracy, not +55.25%.'],
-          ['Regeneration above 100%','Regeneration can exceed 100% — excess is <em>not</em> wasted. At 100% you won\'t lose runes/ammo. Above 100% you start <strong>profiting</strong> them.'],
-          ['Defence boosts','Defence level boosts do <em>not</em> stack with defence potions.'],
-          ['Defenders vs Shields','Defenders are <em>not</em> shields — they are considered off-hands. Shields are already off-hands.'],
-          ['Dinh\'s Bulwark','Two-handed shields like Dinh\'s Bulwark are <em>not</em> off-hands unless a pact explicitly says so.'],
-          ['Melee → Ranged echoes','Two-handed melee weapons can trigger ranged echoes via the dedicated pact, but those echoes do <em>not</em> inherit "never miss", "20% chance to max hit", or the +15% trigger chance unless you also own the corresponding ranged nodes.'],
-          ['Cyclical echoes','Two-handed melee ranged echoes can be cyclical via the deeper ranged node, but do <em>not</em> benefit from the two "+5% chance to fire an echo" nodes (those require regeneration to trigger).'],
-          ['Echo defence rolls','Ranged echoes triggered by a melee weapon roll against the target\'s <strong>melee defence</strong>, not ranged defence.'],
-          ['PvP limitations','Stat boosts, attack speed increases, and melee range increases apply in PvP. Effects like Thorns, Echoes, and Blindbag do <em>not</em> work against players.'],
-          ['Tree resets','The pact tree can be fully reset up to 3 times. Resets are unlocked by completing unique Echo Bosses.'],
-          ['Pact Points','Players unlock a maximum of <strong>40 Pact Points</strong> by completing tasks across League areas.'],
-        ].map(([k,v])=>`<div class="pact-rule"><strong>${k}:</strong> ${v}</div>`).join('')}
+        <div class="sh"><h3>Critical Rules &amp; Clarifications</h3><div class="sh-line"></div></div>
+        <div id="pact-rules-list"></div>
       </div>
     </div>
   </div>
@@ -481,62 +444,72 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
         <div class="calc-grid">
           <div class="calc-block">
             <div class="calc-title">Gathering Rates (per minute)</div>
-            ${[['Mining ores','8 / min','4 bars / min processed'],['Fishing (raw fish)','14 / min','7 cooked / min processed'],['Woodcutting (logs)','10 / min','5 planks / min processed'],['Farming (herbs)','10 / min','5 unfinished potions / min processed'],['Flax picking','50 / min','25 bowstrings / min processed']].map(([a,b,c])=>`
-            <div class="calc-row">
-              <span class="calc-lbl">${a}</span>
-              <div style="text-align:right;"><div class="calc-val">${b}</div><div style="font-size:11px;color:var(--dim);">${c}</div></div>
-            </div>`).join('')}
+            <div class="calc-row"><span class="calc-lbl">Mining ores</span><div style="text-align:right;"><div class="calc-val">8 / min</div><div style="font-size:11px;color:var(--dim);">4 bars / min processed</div></div></div>
+            <div class="calc-row"><span class="calc-lbl">Fishing (raw fish)</span><div style="text-align:right;"><div class="calc-val">14 / min</div><div style="font-size:11px;color:var(--dim);">7 cooked / min processed</div></div></div>
+            <div class="calc-row"><span class="calc-lbl">Woodcutting (logs)</span><div style="text-align:right;"><div class="calc-val">10 / min</div><div style="font-size:11px;color:var(--dim);">5 planks / min processed</div></div></div>
+            <div class="calc-row"><span class="calc-lbl">Farming (herbs)</span><div style="text-align:right;"><div class="calc-val">10 / min</div><div style="font-size:11px;color:var(--dim);">5 unfinished potions / min</div></div></div>
+            <div class="calc-row"><span class="calc-lbl">Flax picking</span><div style="text-align:right;"><div class="calc-val">50 / min</div><div style="font-size:11px;color:var(--dim);">25 bowstrings / min processed</div></div></div>
             <div style="margin-top:10px;font-size:12px;color:var(--dim);font-style:italic;">Processing rates are half of gathering. XP is 10 per resource processed (before league XP multipliers).</div>
           </div>
 
           <div class="calc-block">
             <div class="calc-title">Offline Gains (8 hrs example)</div>
-            ${[['Ores gathered','3,840'],['Bars smelted (if processing)','1,920'],['Fish caught','6,720'],['Fish cooked (if processing)','3,360'],['Logs chopped','4,800'],['Planks made (if processing)','2,400'],['Herbs farmed','4,800'],['Unf potions (if processing)','2,400'],['Flax picked','24,000'],['Bowstrings (if processing)','12,000']].map(([a,b])=>`
-            <div class="calc-row"><span class="calc-lbl">${a}</span><span class="calc-val">${b}</span></div>`).join('')}
+            <div class="calc-row"><span class="calc-lbl">Ores gathered</span><span class="calc-val">3,840</span></div>
+            <div class="calc-row"><span class="calc-lbl">Bars smelted (if processing)</span><span class="calc-val">1,920</span></div>
+            <div class="calc-row"><span class="calc-lbl">Fish caught</span><span class="calc-val">6,720</span></div>
+            <div class="calc-row"><span class="calc-lbl">Fish cooked (if processing)</span><span class="calc-val">3,360</span></div>
+            <div class="calc-row"><span class="calc-lbl">Logs chopped</span><span class="calc-val">4,800</span></div>
+            <div class="calc-row"><span class="calc-lbl">Planks made (if processing)</span><span class="calc-val">2,400</span></div>
+            <div class="calc-row"><span class="calc-lbl">Herbs farmed</span><span class="calc-val">4,800</span></div>
+            <div class="calc-row"><span class="calc-lbl">Unf potions (if processing)</span><span class="calc-val">2,400</span></div>
+            <div class="calc-row"><span class="calc-lbl">Flax picked</span><span class="calc-val">24,000</span></div>
+            <div class="calc-row"><span class="calc-lbl">Bowstrings (if processing)</span><span class="calc-val">12,000</span></div>
           </div>
         </div>
 
         <div class="sh"><h3>Forager's Pouch — Herb Distribution</h3><div class="sh-line"></div></div>
         <div class="notice blue">Herbs gathered are limited to your <strong>Herblore level + 25</strong>. The pouch must be worn or in inventory.</div>
         <div style="background:var(--s2);border:1px solid var(--border2);padding:14px 16px;border-radius:var(--r);">
-          ${[['Tarromin','21.7%'],['Harralander','19.6%'],['Irit','13.0%'],['Avantoe','13.0%'],['Dwarf Weed','6.7%'],['Ranarr','6.5%'],['Kwuarm','6.5%'],['Cadantine','6.5%'],['Lantadyme','6.5%']].map(([h,p])=>`
-          <div class="weight-bar-row">
-            <span class="weight-name">${h}</span>
-            <div class="weight-track"><div class="weight-fill" style="width:${parseFloat(p)/21.7*100}%;"></div></div>
-            <span class="weight-pct">${p}</span>
-          </div>`).join('')}
+          <div class="weight-bar-row"><span class="weight-name">Tarromin</span><div class="weight-track"><div class="weight-fill" style="width:100%;"></div></div><span class="weight-pct">21.7%</span></div>
+          <div class="weight-bar-row"><span class="weight-name">Harralander</span><div class="weight-track"><div class="weight-fill" style="width:90%;"></div></div><span class="weight-pct">19.6%</span></div>
+          <div class="weight-bar-row"><span class="weight-name">Irit</span><div class="weight-track"><div class="weight-fill" style="width:60%;"></div></div><span class="weight-pct">13.0%</span></div>
+          <div class="weight-bar-row"><span class="weight-name">Avantoe</span><div class="weight-track"><div class="weight-fill" style="width:60%;"></div></div><span class="weight-pct">13.0%</span></div>
+          <div class="weight-bar-row"><span class="weight-name">Dwarf Weed</span><div class="weight-track"><div class="weight-fill" style="width:31%;"></div></div><span class="weight-pct">6.7%</span></div>
+          <div class="weight-bar-row"><span class="weight-name">Ranarr</span><div class="weight-track"><div class="weight-fill" style="width:30%;"></div></div><span class="weight-pct">6.5%</span></div>
+          <div class="weight-bar-row"><span class="weight-name">Kwuarm</span><div class="weight-track"><div class="weight-fill" style="width:30%;"></div></div><span class="weight-pct">6.5%</span></div>
+          <div class="weight-bar-row"><span class="weight-name">Cadantine</span><div class="weight-track"><div class="weight-fill" style="width:30%;"></div></div><span class="weight-pct">6.5%</span></div>
+          <div class="weight-bar-row"><span class="weight-name">Lantadyme</span><div class="weight-track"><div class="weight-fill" style="width:30%;"></div></div><span class="weight-pct">6.5%</span></div>
         </div>
 
         <div class="calc-grid" style="margin-top:14px;">
           <div class="calc-block">
             <div class="calc-title">Butler's Bell — Ore Weights</div>
-            ${[['Iron','50%'],['Mithril','30%'],['Adamantite','10%'],['Runite','4%'],['Clay','6%']].map(([o,p])=>`
-            <div class="weight-bar-row">
-              <span class="weight-name">${o}</span>
-              <div class="weight-track"><div class="weight-fill" style="width:${parseFloat(p)}%;"></div></div>
-              <span class="weight-pct">${p}</span>
-            </div>`).join('')}
+            <div class="weight-bar-row"><span class="weight-name">Iron</span><div class="weight-track"><div class="weight-fill" style="width:100%;"></div></div><span class="weight-pct">50%</span></div>
+            <div class="weight-bar-row"><span class="weight-name">Mithril</span><div class="weight-track"><div class="weight-fill" style="width:60%;"></div></div><span class="weight-pct">30%</span></div>
+            <div class="weight-bar-row"><span class="weight-name">Adamantite</span><div class="weight-track"><div class="weight-fill" style="width:20%;"></div></div><span class="weight-pct">10%</span></div>
+            <div class="weight-bar-row"><span class="weight-name">Clay</span><div class="weight-track"><div class="weight-fill" style="width:12%;"></div></div><span class="weight-pct">6%</span></div>
+            <div class="weight-bar-row"><span class="weight-name">Runite</span><div class="weight-track"><div class="weight-fill" style="width:8%;"></div></div><span class="weight-pct">4%</span></div>
           </div>
           <div class="calc-block">
             <div class="calc-title">Butler's Bell — Fish Weights</div>
-            ${[['Salmon','26%'],['Tuna','21%'],['Lobster','18%'],['Swordfish','13.5%'],['Monkfish','9.5%'],['Shark','8%'],['Manta ray','2.5%'],['Anglerfish','1.5%']].map(([f,p])=>`
-            <div class="weight-bar-row">
-              <span class="weight-name">${f}</span>
-              <div class="weight-track"><div class="weight-fill" style="width:${parseFloat(p)/26*100}%;"></div></div>
-              <span class="weight-pct">${p}</span>
-            </div>`).join('')}
+            <div class="weight-bar-row"><span class="weight-name">Salmon</span><div class="weight-track"><div class="weight-fill" style="width:100%;"></div></div><span class="weight-pct">26%</span></div>
+            <div class="weight-bar-row"><span class="weight-name">Tuna</span><div class="weight-track"><div class="weight-fill" style="width:81%;"></div></div><span class="weight-pct">21%</span></div>
+            <div class="weight-bar-row"><span class="weight-name">Lobster</span><div class="weight-track"><div class="weight-fill" style="width:69%;"></div></div><span class="weight-pct">18%</span></div>
+            <div class="weight-bar-row"><span class="weight-name">Swordfish</span><div class="weight-track"><div class="weight-fill" style="width:52%;"></div></div><span class="weight-pct">13.5%</span></div>
+            <div class="weight-bar-row"><span class="weight-name">Monkfish</span><div class="weight-track"><div class="weight-fill" style="width:37%;"></div></div><span class="weight-pct">9.5%</span></div>
+            <div class="weight-bar-row"><span class="weight-name">Shark</span><div class="weight-track"><div class="weight-fill" style="width:31%;"></div></div><span class="weight-pct">8%</span></div>
+            <div class="weight-bar-row"><span class="weight-name">Manta ray</span><div class="weight-track"><div class="weight-fill" style="width:10%;"></div></div><span class="weight-pct">2.5%</span></div>
+            <div class="weight-bar-row"><span class="weight-name">Anglerfish</span><div class="weight-track"><div class="weight-fill" style="width:6%;"></div></div><span class="weight-pct">1.5%</span></div>
           </div>
         </div>
 
         <div class="sh"><h3>Processing Notes</h3><div class="sh-line"></div></div>
-        ${[
-          'Processing planks gives <strong>Fletching XP</strong>, not Construction XP.',
-          'You <em>do</em> get Herblore XP for processing unfinished potions.',
-          'The butler can be retrieved from the Leagues Tutor in Yama\'s Lair if lost.',
-          'Bars are received at <strong>half the rate</strong> of ores.',
-          'Planks are received at <strong>half the rate</strong> of logs.',
-          'Unfinished potions received at <strong>half the rate</strong> of herbs.',
-        ].map(n=>`<div class="faq-item"><span class="faq-dot">→</span><span class="faq-txt">${n}</span></div>`).join('')}
+        <div class="faq-item"><span class="faq-dot">→</span><span class="faq-txt">Processing planks gives <strong>Fletching XP</strong>, not Construction XP.</span></div>
+        <div class="faq-item"><span class="faq-dot">→</span><span class="faq-txt">You <em>do</em> get Herblore XP for processing unfinished potions.</span></div>
+        <div class="faq-item"><span class="faq-dot">→</span><span class="faq-txt">The butler can be retrieved from the Leagues Tutor in Yama's Lair if lost.</span></div>
+        <div class="faq-item"><span class="faq-dot">→</span><span class="faq-txt">Bars are received at <strong>half the rate</strong> of ores.</span></div>
+        <div class="faq-item"><span class="faq-dot">→</span><span class="faq-txt">Planks are received at <strong>half the rate</strong> of logs.</span></div>
+        <div class="faq-item"><span class="faq-dot">→</span><span class="faq-txt">Unfinished potions received at <strong>half the rate</strong> of herbs.</span></div>
       </div>
     </div>
   </div>
@@ -565,12 +538,12 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
         <div class="cap-grid" id="cap-grid"></div>
 
         <div class="sh"><h3>New XP Tasks (Leagues VI)</h3><div class="sh-line"></div></div>
-        ${[
-          ['Obtain 100M XP in any non-combat skill','New task type unique to Leagues VI.'],
-          ['Obtain 200M XP in any non-combat skill','New task type unique to Leagues VI.'],
-          ['Obtain 100M XP in any combat skill (Atk, Str, Def, Magic, Ranged, HP, or Prayer)','New task type unique to Leagues VI.'],
-          ['Obtain 200M XP in any combat skill','New task type unique to Leagues VI.'],
-        ].map(([t,n])=>`<div class="cap-card"><div class="cap-title">XP Task</div><div class="cap-detail">${t}</div><div class="cap-note">${n}</div></div>`).join('')}
+        <div class="cap-grid">
+          <div class="cap-card"><div class="cap-title">XP Task</div><div class="cap-detail">Obtain 100M XP in any non-combat skill</div><div class="cap-note">New task type unique to Leagues VI.</div></div>
+          <div class="cap-card"><div class="cap-title">XP Task</div><div class="cap-detail">Obtain 200M XP in any non-combat skill</div><div class="cap-note">New task type unique to Leagues VI.</div></div>
+          <div class="cap-card"><div class="cap-title">XP Task</div><div class="cap-detail">Obtain 100M XP in any combat skill (Atk, Str, Def, Magic, Ranged, HP, or Prayer)</div><div class="cap-note">New task type unique to Leagues VI.</div></div>
+          <div class="cap-card"><div class="cap-title">XP Task</div><div class="cap-detail">Obtain 200M XP in any combat skill</div><div class="cap-note">New task type unique to Leagues VI.</div></div>
+        </div>
       </div>
     </div>
   </div>
@@ -586,27 +559,37 @@ body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;bac
 
         <div class="sh"><h3>Auto-completed at League Start</h3><div class="sh-line"></div></div>
         <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:6px;margin-bottom:16px;">
-          ${['Dragon Slayer I','Learning the Ropes','The Restless Ghost','Rune Mysteries','Children of the Sun','Desert Treasure II: The Fallen Empire','Druidic Ritual','Eagles\' Peak','Elemental Workshop I','Fairytale I: Growing Pains','Fairytale II: Cure a Queen','Lost City','Nature Spirit','Perilous Moons','Priest in Peril','Twilight\'s Promise'].map(q=>`
-          <div style="background:var(--s2);border:1px solid var(--border2);border-left:2px solid var(--green);padding:7px 11px;border-radius:0 var(--r) var(--r) 0;font-size:13px;color:var(--bone);">✓ ${q}</div>`).join('')}
+          <div style="background:var(--s2);border:1px solid var(--border2);border-left:2px solid var(--green);padding:7px 11px;border-radius:0 var(--r) var(--r) 0;font-size:13px;color:var(--bone);">✓ Dragon Slayer I</div>
+          <div style="background:var(--s2);border:1px solid var(--border2);border-left:2px solid var(--green);padding:7px 11px;border-radius:0 var(--r) var(--r) 0;font-size:13px;color:var(--bone);">✓ Learning the Ropes</div>
+          <div style="background:var(--s2);border:1px solid var(--border2);border-left:2px solid var(--green);padding:7px 11px;border-radius:0 var(--r) var(--r) 0;font-size:13px;color:var(--bone);">✓ The Restless Ghost</div>
+          <div style="background:var(--s2);border:1px solid var(--border2);border-left:2px solid var(--green);padding:7px 11px;border-radius:0 var(--r) var(--r) 0;font-size:13px;color:var(--bone);">✓ Rune Mysteries</div>
+          <div style="background:var(--s2);border:1px solid var(--border2);border-left:2px solid var(--green);padding:7px 11px;border-radius:0 var(--r) var(--r) 0;font-size:13px;color:var(--bone);">✓ Children of the Sun</div>
+          <div style="background:var(--s2);border:1px solid var(--border2);border-left:2px solid var(--green);padding:7px 11px;border-radius:0 var(--r) var(--r) 0;font-size:13px;color:var(--bone);">✓ Desert Treasure II: The Fallen Empire</div>
+          <div style="background:var(--s2);border:1px solid var(--border2);border-left:2px solid var(--green);padding:7px 11px;border-radius:0 var(--r) var(--r) 0;font-size:13px;color:var(--bone);">✓ Druidic Ritual</div>
+          <div style="background:var(--s2);border:1px solid var(--border2);border-left:2px solid var(--green);padding:7px 11px;border-radius:0 var(--r) var(--r) 0;font-size:13px;color:var(--bone);">✓ Eagles' Peak</div>
+          <div style="background:var(--s2);border:1px solid var(--border2);border-left:2px solid var(--green);padding:7px 11px;border-radius:0 var(--r) var(--r) 0;font-size:13px;color:var(--bone);">✓ Elemental Workshop I</div>
+          <div style="background:var(--s2);border:1px solid var(--border2);border-left:2px solid var(--green);padding:7px 11px;border-radius:0 var(--r) var(--r) 0;font-size:13px;color:var(--bone);">✓ Fairytale I: Growing Pains</div>
+          <div style="background:var(--s2);border:1px solid var(--border2);border-left:2px solid var(--green);padding:7px 11px;border-radius:0 var(--r) var(--r) 0;font-size:13px;color:var(--bone);">✓ Fairytale II: Cure a Queen</div>
+          <div style="background:var(--s2);border:1px solid var(--border2);border-left:2px solid var(--green);padding:7px 11px;border-radius:0 var(--r) var(--r) 0;font-size:13px;color:var(--bone);">✓ Lost City</div>
+          <div style="background:var(--s2);border:1px solid var(--border2);border-left:2px solid var(--green);padding:7px 11px;border-radius:0 var(--r) var(--r) 0;font-size:13px;color:var(--bone);">✓ Nature Spirit</div>
+          <div style="background:var(--s2);border:1px solid var(--border2);border-left:2px solid var(--green);padding:7px 11px;border-radius:0 var(--r) var(--r) 0;font-size:13px;color:var(--bone);">✓ Perilous Moons</div>
+          <div style="background:var(--s2);border:1px solid var(--border2);border-left:2px solid var(--green);padding:7px 11px;border-radius:0 var(--r) var(--r) 0;font-size:13px;color:var(--bone);">✓ Priest in Peril</div>
+          <div style="background:var(--s2);border:1px solid var(--border2);border-left:2px solid var(--green);padding:7px 11px;border-radius:0 var(--r) var(--r) 0;font-size:13px;color:var(--bone);">✓ Twilight's Promise</div>
         </div>
 
         <div class="sh"><h3>Auto-completed When Unlocking Regions</h3><div class="sh-line"></div></div>
-        ${[
-          ['Kourend & Kebos','A Kingdom Divided (and all pre-requisite quests)'],
-          ['Morytania','Various Morytania quests auto-completed'],
-          ['All regions','Any quest with an entrance in the newly unlocked region'],
-        ].map(([r,q])=>`<div class="rn-item"><div class="rn-name">${r}</div><div class="rn-note">${q}</div></div>`).join('')}
+        <div class="rn-item"><div class="rn-name">Kourend &amp; Kebos</div><div class="rn-note">A Kingdom Divided (and all pre-requisite quests)</div></div>
+        <div class="rn-item"><div class="rn-name">Morytania</div><div class="rn-note">Various Morytania quests auto-completed</div></div>
+        <div class="rn-item"><div class="rn-name">All regions</div><div class="rn-note">Any quest with an entrance in the newly unlocked region</div></div>
 
         <div class="sh"><h3>Notable Mechanics</h3><div class="sh-line"></div></div>
-        ${[
-          'Teleports are restricted to unlocked areas — fairy rings, gnome gliders, charter ships all require destination to be unlocked.',
-          'Zanaris and the Abyss are accessible from <strong>all regions</strong> (Cosmic Altar via Fairy Rings). Sire is accessible via the Abyss.',
-          'Death\'s Office, Player-owned House, and Random Events are accessible from all areas.',
-          'Respawning is only possible in regions you\'ve unlocked.',
-          'Unlocking areas auto-completes associated quests — but with <em>no XP reward</em>.',
-          'Hunter\'s Guild shop not accessible from level 1 — Bird snares and Hunter boxes available in Civitas General Store.',
-          'Cannot enter Ancient Guthixian Temple from Chasm of Tears.',
-        ].map(n=>`<div class="faq-item"><span class="faq-dot">→</span><span class="faq-txt">${n}</span></div>`).join('')}
+        <div class="faq-item"><span class="faq-dot">→</span><span class="faq-txt">Teleports are restricted to unlocked areas — fairy rings, gnome gliders, charter ships all require destination to be unlocked.</span></div>
+        <div class="faq-item"><span class="faq-dot">→</span><span class="faq-txt">Zanaris and the Abyss are accessible from <strong>all regions</strong> (Cosmic Altar via Fairy Rings). Sire is accessible via the Abyss.</span></div>
+        <div class="faq-item"><span class="faq-dot">→</span><span class="faq-txt">Death's Office, Player-owned House, and Random Events are accessible from all areas.</span></div>
+        <div class="faq-item"><span class="faq-dot">→</span><span class="faq-txt">Respawning is only possible in regions you've unlocked.</span></div>
+        <div class="faq-item"><span class="faq-dot">→</span><span class="faq-txt">Unlocking areas auto-completes associated quests — but with <em>no XP reward</em>.</span></div>
+        <div class="faq-item"><span class="faq-dot">→</span><span class="faq-txt">Hunter's Guild shop not accessible from level 1 — Bird snares and Hunter boxes available in Civitas General Store.</span></div>
+        <div class="faq-item"><span class="faq-dot">→</span><span class="faq-txt">Cannot enter Ancient Guthixian Temple from Chasm of Tears.</span></div>
       </div>
     </div>
   </div>
@@ -1204,8 +1187,64 @@ async function fetchWikiStatus(){
 }
 
 // ══════════════════════════════════════════════════════
-// RENDER ALL
+// RENDER: KEY FACTS
 // ══════════════════════════════════════════════════════
+function renderKeyFacts(){
+  const grid = document.getElementById('key-facts-grid');
+  if (!grid) return;
+  const facts = [
+    ['Start','Varlamore (Yama\'s Lair)'],
+    ['Karamja','Free on first region unlock'],
+    ['Unlock','3 of 8 regions total'],
+    ['Misthalin','Locked — all league'],
+    ['XP Rate','5× base → 16× max'],
+    ['Drop Rate','2× base → 5× max'],
+    ['Farming Ticks','Every 1 minute'],
+    ['Minigame Pts','4× base → 8× max'],
+    ['Run Energy','Never drains'],
+    ['Clues','Stackable scroll boxes'],
+    ['Zulrah','No dmg cap, no melee immunity'],
+    ['DT2 Bosses','All drop all Soulreaper pieces'],
+    ['ToB/ToA','Shared group uniques'],
+    ['CoX CM','+25% dmg/def, +50% HP, 3× unique'],
+    ['ToB HM','+25% dmg/def, +50% HP, 2× unique'],
+    ['NMZ pts','1gp each in Kandarin'],
+    ['Wildy deaths','Gravestone — no item loss'],
+    ['Rev Caves','Free entry (no 100k)'],
+    ['Wildy Agility','Free entry'],
+    ['Shops','Never deplete'],
+    ['Sailing','Disabled'],
+    ['Duration','56 days (Apr 15 – Jun 10)'],
+  ];
+  grid.innerHTML = facts.map(([l,v]) =>
+    `<div style="background:var(--s2);border:1px solid var(--border2);border-left:2px solid var(--gold);padding:8px 11px;border-radius:0 var(--r) var(--r) 0;">
+      <div style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:2px;color:var(--dim);text-transform:uppercase;margin-bottom:3px;">${l}</div>
+      <div style="font-size:13px;color:var(--bone);">${v}</div>
+    </div>`
+  ).join('');
+}
+
+// ══════════════════════════════════════════════════════
+// RENDER: PACT RULES
+// ══════════════════════════════════════════════════════
+function renderPactRules(){
+  const el = document.getElementById('pact-rules-list');
+  if (!el) return;
+  const rules = [
+    ['Accuracy bonuses','All accuracy bonuses are <strong>additive, not multiplicative</strong>. A 35% node and a 15% node give +50% bonus accuracy, not +55.25%.'],
+    ['Regeneration above 100%','Regeneration can exceed 100% — excess is <em>not</em> wasted. At 100% you won\'t lose runes/ammo. Above 100% you start <strong>profiting</strong> them.'],
+    ['Defence boosts','Defence level boosts do <em>not</em> stack with defence potions.'],
+    ['Defenders vs Shields','Defenders are <em>not</em> shields — they are considered off-hands. Shields are already considered off-hands.'],
+    ['Dinh\'s Bulwark','Two-handed shields like Dinh\'s Bulwark are <em>not</em> off-hands unless a pact explicitly says so.'],
+    ['Melee → Ranged echoes','Two-handed melee weapons can trigger ranged echoes via the dedicated pact, but those echoes do <em>not</em> inherit "never miss", "20% chance to max hit", or the +15% trigger chance unless you also own the corresponding ranged nodes.'],
+    ['Cyclical echoes','Two-handed melee ranged echoes can be cyclical via the deeper ranged node, but do <em>not</em> benefit from the two "+5% chance to fire an echo" nodes (those require regeneration to trigger).'],
+    ['Echo defence rolls','Ranged echoes triggered by a melee weapon roll against the target\'s <strong>melee defence</strong>, not ranged defence.'],
+    ['PvP limitations','Stat boosts, attack speed increases, and melee range increases apply in PvP. Effects like Thorns, Echoes, and Blindbag do <em>not</em> work against players.'],
+    ['Tree resets','The pact tree can be fully reset up to 3 times. Resets are unlocked by completing unique Echo Bosses.'],
+    ['Pact Points','Players unlock a maximum of <strong>40 Pact Points</strong> by completing tasks across League areas.'],
+  ];
+  el.innerHTML = rules.map(([k,v]) => `<div class="pact-rule"><strong>${k}:</strong> ${v}</div>`).join('');
+}
 function renderAll(){
   renderRegions();renderRelics();renderAnalysis();renderPresets();updateShare();
 }
@@ -1216,6 +1255,8 @@ function renderAll(){
 loadFromUrl();
 renderSavedBuilds();
 renderAll();
+renderKeyFacts();
+renderPactRules();
 renderEchoBosses();
 renderFAQ();
 renderPointCaps();
