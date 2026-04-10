@@ -1148,7 +1148,7 @@ function renderSavedBuilds(){
 // SHARE
 // ══════════════════════════════════════════════════════
 function updateShare(){
-  const url=location.origin+location.pathname+'?build='+encodeState(state);
+  const url=location.origin+location.pathname+'?build='+encState(state);
   document.getElementById('share-input').value=url;
 }
 function showShare(){
